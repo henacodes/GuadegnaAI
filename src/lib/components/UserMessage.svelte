@@ -1,5 +1,9 @@
 <script>
+	
     import { Avatar } from "@skeletonlabs/skeleton"
+
+
+	export let text;
 </script>
 
 <div class="grid grid-cols-[1fr_auto] gap-2">
@@ -8,7 +12,8 @@
 			<p class="font-bold">Me</p>
 			<small class="opacity-50">TODAY</small>
 		</header>
-		<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Qui fuga corporis, magni tempora vel maiores, voluptatum repellendus voluptatem quisquam tempore perspiciatis ullam voluptas aliquid eius natus facilis odio soluta inventore.</p>
-	</div>
+		<p>{text}</p>
+
+		</div>
 	<Avatar src="https://i.pravatar.cc/" width="w-12" />
 </div>

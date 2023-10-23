@@ -22,6 +22,7 @@
       videoEl.srcObject = stream;
       videoEl.style.display = "block";
       imageBase64 = "";
+
     } catch (error) {
       console.error("Error accessing camera:", error);
     }
