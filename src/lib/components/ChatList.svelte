@@ -37,9 +37,9 @@
 	{#each $chatStore.messages as message}
         <div bind:this={msg} >
             {#if message.type == "user"}
-            <UserMessage text={message.text}  />
+            <UserMessage text={message.text} id={message.id}   />
             {:else}
-            <BotMessage text={message.text} />
+            <BotMessage text={message.text} id={message.id}  />
         {/if}
         </div>
     {/each}

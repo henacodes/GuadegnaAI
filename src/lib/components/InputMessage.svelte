@@ -4,6 +4,8 @@
 	import chatStore from "../../stores/chatStore"
 	import { onMount, onDestroy } from "svelte"
 	import 'iconify-icon'
+	import { v4 as uuidv4 } from 'uuid';
+
 	import { PUBLIC_MAKESUIT_API_KEY } from "$env/static/public";
 
 
@@ -26,7 +28,6 @@
 		prompt = e.target.value
 	}
 	const generateResponse = async(prompt) =>{
-
 		const res = await fetch(
           `https://generativelanguage.googleapis.com/v1beta2/models/text-bison-001:generateText?key=${PUBLIC_MAKESUIT_API_KEY}`,
           {
@@ -48,7 +49,7 @@
 		chatStore.update(curr =>{
 			return{
 				...curr,
-				messages:[...curr.messages, { type:"bot", text:result }]
+				messages:[...curr.messages, { type:"bot", text:result, id:uuidv4() }]
 			}
 		})
 	}
@@ -57,7 +58,7 @@
 			chatStore.update(curr =>{
 			return{
 				...curr,
-				messages:[...curr.messages, { type:"user", text:prompt }]
+				messages:[...curr.messages, { type:"user", text:prompt, id:uuidv4() }]
 			}
 		})
 		generateResponse(prompt)

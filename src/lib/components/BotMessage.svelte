@@ -1,7 +1,11 @@
 
 <script>
-	export let text;
+	import { clipboard } from '@skeletonlabs/skeleton';
 	import "iconify-icon"
+
+	export let text;
+	export let id;
+	
 
 </script>
 <div class="grid grid-cols-[auto_1fr] gap-2 my-3 ">
@@ -9,12 +13,16 @@
 	<div class="card p-4 variant-soft rounded-tl-none space-y-2">
 		<header class="flex justify-between items-center">
 			<p class="font-bold">Bot</p>
-			<small class="opacity-50">Today</small>
+			<button use:clipboard={{ element: id }}><iconify-icon style="color: #ffffff; font-size: 20px" icon="bxs:copy" class="text-primary  "  ></iconify-icon></button>
+
 		</header>
-		<p>{text}</p>
+		<p data-clipboard={id} >{text}</p>
 	</div>
 </div>
 			
+
+
+
 
 
 
