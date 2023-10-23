@@ -1,6 +1,7 @@
 <script>
 	
     import { Avatar } from "@skeletonlabs/skeleton"
+	import 'iconify-icon'
 
 
 	export let text;
@@ -15,5 +16,5 @@
 		<p>{text}</p>
 
 		</div>
-	<Avatar src="https://i.pravatar.cc/" width="w-12" />
+	<iconify-icon style="color: #6b7280; font-size: 30px" icon="mdi:user"></iconify-icon>
 </div>
