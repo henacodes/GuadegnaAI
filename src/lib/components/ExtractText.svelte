@@ -1,13 +1,19 @@
 <script>
 
     import { onMount, onDestroy } from "svelte"
+    import { createWorker } from "tesseract.js";
+    import { getModalStore } from '@skeletonlabs/skeleton';
+    import 'iconify-icon'
+    import { ProgressRadial } from '@skeletonlabs/skeleton';
+    import extractStore from "../../stores/extractStore"
+    import chatStore from "../../stores/chatStore";
+
     let videoEl;
     let imageBase64 = "";
     let cameraMode = "user";
-    import 'iconify-icon'
 
 
-
+    const modalStore = getModalStore();
     const startVid = async () => {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({
@@ -37,14 +43,31 @@
    }
   }
   async function performOCR(imageData) {
+    extractStore.update((curr) =>{
+      return{
+        ...curr,
+        loading:true
+      }
+    })
     const worker = await createWorker("eng");
     (async () => {
-      const {
+      try {
+        const {
         data: { text },
       } = await worker.recognize(imageData);
       console.log(text);
-      alert(text);
+      extractStore.update(curr => {
+        return{
+          ...curr,
+          extractedText:text
+        }
+      }) 
       await worker.terminate();
+      modalStore.close()
+      } catch (error) {
+        console.log(error)
+      }
+
     })();
   }
   async function captureImage() {
@@ -73,35 +96,40 @@
   })
 </script>
 
-<div class="card p-4 variant-soft-surface w-[80vw]">
-    <div class="flex flex-col items-center" >
-        <!-- svelte-ignore a11y-media-has-caption -->
-        
-       {#if imageBase64}
-       <img class="w-[60%] rounded-md" src={imageBase64} alt="" />
-       {:else}
-       <video bind:this={videoEl} autoplay class=" w-[60%] rounded-md "  />
+{#if !$chatStore.loading}
+<div class="card p-4 variant-soft-surface ">
+   <div class="flex flex-col items-center" >
+     <!-- svelte-ignore a11y-media-has-caption -->
+     
+   {#if imageBase64}
+   <img class="w-[60%] rounded-md" src={imageBase64} alt="" />
+   {:else}
+   <video bind:this={videoEl} autoplay class=" w-[60%] rounded-md "  />
 
+   {/if}
+     <div class="flex flex-col items-center ">   
+       {#if !imageBase64}
+           <button on:click={captureImage} type="button" class="btn-icon variant-filled">
+             <iconify-icon icon="mdi:camera" class="flex items-center" ></iconify-icon>
+         </button>
        {/if}
-        <div class="flex flex-col items-center ">   
-           {#if !imageBase64}
-              <button on:click={captureImage} type="button" class="btn-icon variant-filled">
-                <iconify-icon icon="mdi:camera" class="flex items-center" ></iconify-icon>
-            </button>
-           {/if}
-          <div>
-          {#if imageBase64}
-            <button on:click={() => performOCR(imageBase64)} type="button" class="btn btn-sm variant-filled">Extract</button>
-          {:else}
-          <button
-                on:click={() => {
-            cameraMode = "environment";
-            startVid();
-            }}>Rear camera</button
-            >
-          {/if}
-          
-           </div>
-        </div>
-    </div>
+       <div>
+       {#if imageBase64}
+         <button on:click={() => performOCR(imageBase64)} type="button" class="btn btn-sm variant-filled">Extract</button>
+       {:else}
+       <button
+             on:click={() => {
+         cameraMode = "environment";
+         startVid();
+         }}>Rear camera</button
+         >
+       {/if}
+       
+       </div>
+     </div>
+   </div>
 </div>
+
+{:else}
+<ProgressRadial ... stroke={50} meter="stroke-primary-500" track="stroke-primary-500/30" strokeLinecap={butt} />
+{/if}

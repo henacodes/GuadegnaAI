@@ -33,7 +33,7 @@
 
 
 <div bind:this={chatList
-}  class="card p-4 max-h-[70vh] h-[70vh]  overflow-auto space-y-4">
+}  class="card p-4 h-[68vh]  overflow-auto space-y-4">
 	{#each $chatStore.messages as message}
         <div bind:this={msg} >
             {#if message.type == "user"}

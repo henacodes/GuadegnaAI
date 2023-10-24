@@ -5,11 +5,17 @@
 	import { onMount, onDestroy } from "svelte"
 	import 'iconify-icon'
 	import { v4 as uuidv4 } from 'uuid';
-
 	import { PUBLIC_MAKESUIT_API_KEY } from "$env/static/public";
+	import extractStore from '../../stores/extractStore';
 
 
-
+	const modalStore = getModalStore();
+	let prompt;
+	const modal = {
+	type: 'component',
+	component: 'ExtractText',
+	};
+	let promptInput;
 	const returnPromptTemplate = (userPrompt) =>{
 		console.log(userPrompt)
 		return `${JSON.stringify($chatStore.messages)}. This is what you and the user have talked in the last 
@@ -17,12 +23,7 @@
 		question and "type:bot" means the answer you gave to the user.
 		please answer to the user's question here. "${userPrompt}" `
 	}
-	const modalStore = getModalStore();
-	let prompt;
-	const modal = {
-	type: 'component',
-	component: 'ExtractText',
-	};
+	
 
 	const handleInput = e =>{
 		prompt = e.target.value
@@ -99,6 +100,10 @@
 		}
 	});
 
+	extractStore.subscribe(curr =>{
+		promptInput.value = curr.extractedText
+	})
+
    }
 
   });
@@ -116,7 +121,7 @@
 	<button on:click={() => modalStore.trigger(modal)}  class="input-group-shim"> 
 		<iconify-icon icon="mdi:camera"></iconify-icon>
 	</button>
-	<input bind:value={prompt}  on:input={handleInput} class="input focus:outline-none border-none pl-3 py-2" type="text" placeholder="Write your prompt here" />
+	<input bind:this={promptInput} bind:value={prompt}  on:input={handleInput} class="input focus:outline-none border-none pl-3 py-2" type="text" placeholder="Write your prompt here" />
 	<button on:click={handleSend} class="variant-filled-primary">Send</button>
 </div>
 					

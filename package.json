@@ -22,6 +22,7 @@
   "type": "module",
   "dependencies": {
     "iconify-icon": "^1.0.8",
+    "tesseract.js": "^5.0.2",
     "uuid": "^9.0.1"
   }
 }
