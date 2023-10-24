@@ -28,7 +28,14 @@
 		prompt = e.target.value
 	}
 	const generateResponse = async(prompt) =>{
-		const res = await fetch(
+		chatStore.update(curr =>{
+			return{
+				...curr,
+				loading:true
+			}
+		})
+		try {
+			const res = await fetch(
           `https://generativelanguage.googleapis.com/v1beta2/models/text-bison-001:generateText?key=${PUBLIC_MAKESUIT_API_KEY}`,
           {
             method: "POST",
@@ -44,6 +51,12 @@
         );
 
         const data = await res.json();
+		chatStore.update(curr =>{
+			return{
+				...curr,
+				loading:false
+			}
+		})
 		console.log(data)
 		const result = data.candidates[0].output
 		chatStore.update(curr =>{
@@ -52,6 +65,15 @@
 				messages:[...curr.messages, { type:"bot", text:result, id:uuidv4() }]
 			}
 		})
+		} catch (error) {
+			console.log(error)
+			chatStore.update(curr =>{
+			return{
+				...curr,
+				loading:true
+			}
+		})
+		}
 	}
 	const handleSend = () =>{
 		if(prompt){

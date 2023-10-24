@@ -43,6 +43,9 @@
         {/if}
         </div>
     {/each}
+    {#if $chatStore.loading}
+        <p>Bro is thinking ....</p>
+    {/if}
     
 </div>
 			
