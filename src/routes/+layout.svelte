@@ -18,7 +18,7 @@
 		<!-- App Bar -->
 		<AppBar>
 			<svelte:fragment slot="lead">
-				<strong class="text-xl uppercase">Guadegna AI</strong>
+				<strong class="text-xl uppercase">Guadegna-AI</strong>
 			</svelte:fragment>
 			<svelte:fragment slot="trail">
 				<LightSwitch />
